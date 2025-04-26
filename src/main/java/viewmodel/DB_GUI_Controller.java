@@ -30,7 +30,13 @@ import java.util.ResourceBundle;
 public class DB_GUI_Controller implements Initializable {
 
     @FXML
-    TextField first_name, last_name, department, major, email, imageURL;
+    public MenuItem editItem, deleteItem, ClearItem, CopyItem;
+    @FXML
+    public Button clearBtn, addBtn, deleteBtn, editBtn;
+    @FXML
+    TextField first_name, last_name, department, email, imageURL;
+    @FXML
+    private ComboBox<Major> major;
     @FXML
     ImageView img_view;
     @FXML
@@ -54,16 +60,79 @@ public class DB_GUI_Controller implements Initializable {
             tv_major.setCellValueFactory(new PropertyValueFactory<>("major"));
             tv_email.setCellValueFactory(new PropertyValueFactory<>("email"));
             tv.setItems(data);
+
+            // Disable buttons initially
+            editBtn.setDisable(true);
+            deleteBtn.setDisable(true);
+            addBtn.setDisable(true);
+            editItem.setDisable(true);
+            deleteItem.setDisable(true);
+            CopyItem.setDisable(true);
+
+            // Enable when a row is selected
+            tv.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                boolean noSelection = newSelection == null;
+                editBtn.setDisable(noSelection);
+                deleteBtn.setDisable(noSelection);
+                addBtn.setDisable(noSelection);
+                editItem.setDisable(noSelection);
+                deleteItem.setDisable(noSelection);
+                CopyItem.setDisable(noSelection);
+            });
+
+            first_name.textProperty().addListener((obs, oldVal, newVal) -> validateFormFields());
+            last_name.textProperty().addListener((obs, oldVal, newVal) -> validateFormFields());
+            department.textProperty().addListener((obs, oldVal, newVal) -> validateFormFields());
+            major.setItems(FXCollections.observableArrayList(Major.values()));
+            major.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> validateFormFields());
+            email.textProperty().addListener((obs, oldVal, newVal) -> validateFormFields());
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
+    private void validateFormFields() {
+        boolean validFirst = validateName(first_name);
+        boolean validLast = validateName(last_name);
+        boolean validDept = validateDepartment(department);
+        boolean validMajor = major.getValue() != null;
+        boolean validEmail = validateEmail(email);
+
+        boolean allValid = validFirst && validLast && validDept && validMajor && validEmail;
+        addBtn.setDisable(!allValid);
+    }
+
+    private boolean validateName(TextField tf) {
+        String regex = "^[A-Z][a-z]+(?:\\s[A-Z][a-z]+)*$"; // e.g., John Doe
+        boolean valid = tf.getText().matches(regex);
+        tf.setStyle(valid ? null : "-fx-border-color: red; -fx-border-width: 2px;");
+        return valid;
+    }
+
+    private boolean validateDepartment(TextField tf) {
+        String regex = "^[A-Za-z]{2,}(\\s[A-Za-z]{2,})*$"; // General words
+        boolean valid = tf.getText().matches(regex);
+        tf.setStyle(valid ? null : "-fx-border-color: red; -fx-border-width: 2px;");
+        return valid;
+    }
+
+    private boolean validateEmail(TextField tf) {
+        String regex = "^[\\w.-]+@[\\w.-]+\\.\\w{2,}$";
+        boolean valid = tf.getText().matches(regex);
+        if (!valid) {
+            tf.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+        } else {
+            tf.setStyle(null);
+        }
+        return valid;
+    }
+
     @FXML
     protected void addNewRecord() {
-
+        Major selectedMajor = major.getValue();
             Person p = new Person(first_name.getText(), last_name.getText(), department.getText(),
-                    major.getText(), email.getText(), imageURL.getText());
+                    selectedMajor.name(), email.getText(), imageURL.getText());
             cnUtil.insertUser(p);
             cnUtil.retrieveId(p);
             p.setId(cnUtil.retrieveId(p));
@@ -77,9 +146,14 @@ public class DB_GUI_Controller implements Initializable {
         first_name.setText("");
         last_name.setText("");
         department.setText("");
-        major.setText("");
+        major.setValue(null);
         email.setText("");
         imageURL.setText("");
+        first_name.setStyle(null);
+        last_name.setStyle(null);
+        department.setStyle(null);
+        major.setStyle(null);
+        email.setStyle(null);
     }
 
     @FXML
@@ -116,10 +190,11 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     protected void editRecord() {
+        Major selectedMajor = major.getValue();
         Person p = tv.getSelectionModel().getSelectedItem();
         int index = data.indexOf(p);
         Person p2 = new Person(index + 1, first_name.getText(), last_name.getText(), department.getText(),
-                major.getText(), email.getText(),  imageURL.getText());
+                selectedMajor.name(), email.getText(),  imageURL.getText());
         cnUtil.editUser(p.getId(), p2);
         data.remove(p);
         data.add(index, p2);
@@ -154,7 +229,7 @@ public class DB_GUI_Controller implements Initializable {
         first_name.setText(p.getFirstName());
         last_name.setText(p.getLastName());
         department.setText(p.getDepartment());
-        major.setText(p.getMajor());
+        major.setValue(Major.valueOf(p.getMajor()));
         email.setText(p.getEmail());
         imageURL.setText(p.getImageURL());
     }
@@ -214,7 +289,7 @@ public class DB_GUI_Controller implements Initializable {
         });
     }
 
-    private static enum Major {Business, CSC, CPIS}
+    private static enum Major {Business, CSC, CPIS, English}
 
     private static class Results {
 
