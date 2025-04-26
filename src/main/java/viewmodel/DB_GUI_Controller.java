@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 import model.Person;
 import service.MyLogger;
 
-import java.io.File;
+import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -31,6 +31,10 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     public MenuItem editItem, deleteItem, ClearItem, CopyItem;
+    @FXML
+    private Label statusLabel;
+    @FXML
+    public MenuItem importCSVItem, exportCSVItem;
     @FXML
     public Button clearBtn, addBtn, deleteBtn, editBtn;
     @FXML
@@ -138,7 +142,7 @@ public class DB_GUI_Controller implements Initializable {
             p.setId(cnUtil.retrieveId(p));
             data.add(p);
             clearForm();
-
+            setStatus("New record added for " + p.getFirstName() + " " + p.getLastName());
     }
 
     @FXML
@@ -199,6 +203,7 @@ public class DB_GUI_Controller implements Initializable {
         data.remove(p);
         data.add(index, p2);
         tv.getSelectionModel().select(index);
+        setStatus("Record updated for ID: " + p.getId());
     }
 
     @FXML
@@ -208,6 +213,7 @@ public class DB_GUI_Controller implements Initializable {
         cnUtil.deleteRecord(p);
         data.remove(index);
         tv.getSelectionModel().select(index);
+        setStatus("Record deleted for ID: " + p.getId());
     }
 
     @FXML
@@ -304,4 +310,58 @@ public class DB_GUI_Controller implements Initializable {
         }
     }
 
+    private void setStatus(String message) {
+        statusLabel.setText(message);
+    }
+
+    @FXML
+    protected void importCSV() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import CSV File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv"));
+        File file = fileChooser.showOpenDialog(menuBar.getScene().getWindow());
+
+        if (file != null) {
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] fields = line.split(",");
+                    if (fields.length >= 6) {
+                        Person p = new Person(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]);
+                        cnUtil.insertUser(p);
+                        p.setId(cnUtil.retrieveId(p));
+                        data.add(p);
+                    }
+                }
+                setStatus("CSV file imported successfully.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                setStatus("Error importing CSV file.");
+            }
+        }
+    }
+
+    @FXML
+    protected void exportCSV() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export to CSV");
+        fileChooser.setInitialFileName("users.csv");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv"));
+        File file = fileChooser.showSaveDialog(menuBar.getScene().getWindow());
+
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                for (Person p : data) {
+                    String row = String.join(",", p.getFirstName(), p.getLastName(), p.getDepartment(),
+                            p.getMajor(), p.getEmail(), p.getImageURL());
+                    writer.write(row);
+                    writer.newLine();
+                }
+                setStatus("CSV file exported successfully.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                setStatus("Error exporting CSV file.");
+            }
+        }
+    }
 }
