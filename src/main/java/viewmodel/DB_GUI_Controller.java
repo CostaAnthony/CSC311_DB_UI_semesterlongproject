@@ -1,6 +1,7 @@
 package viewmodel;
 
 import dao.DbConnectivityClass;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,9 +19,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.Person;
 import service.MyLogger;
-
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
@@ -51,8 +52,12 @@ public class DB_GUI_Controller implements Initializable {
     private TableColumn<Person, Integer> tv_id;
     @FXML
     private TableColumn<Person, String> tv_fn, tv_ln, tv_department, tv_major, tv_email;
+    @FXML
+    private TextField searchField;
+
     private final DbConnectivityClass cnUtil = new DbConnectivityClass();
     private final ObservableList<Person> data = cnUtil.getData();
+    private PauseTransition inactivityTimer;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -94,6 +99,12 @@ public class DB_GUI_Controller implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        // Waits till scene is created and starts the inactivity listeners
+        Platform.runLater(() -> {
+            inactivityListeners(menuBar.getScene());
+        });
+        setupInactivityTimer();
     }
 
     private void validateFormFields() {
@@ -362,6 +373,35 @@ public class DB_GUI_Controller implements Initializable {
                 e.printStackTrace();
                 setStatus("Error exporting CSV file.");
             }
+        }
+    }
+    private void setupInactivityTimer() {
+        inactivityTimer = new PauseTransition(Duration.seconds(300)); // 5 minute timer
+        inactivityTimer.setOnFinished(event -> logoutDueToInactivity());
+    }
+
+    public void inactivityListeners(Scene scene) {
+        scene.setOnMouseMoved(event -> resetInactivityTimer());
+        scene.setOnMouseClicked(event -> resetInactivityTimer());
+        scene.setOnKeyPressed(event -> resetInactivityTimer());
+        scene.setOnKeyTyped(event -> resetInactivityTimer());
+        inactivityTimer.playFromStart();
+    }
+
+    private void resetInactivityTimer() {
+        inactivityTimer.playFromStart();
+    }
+
+    private void logoutDueToInactivity() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
+            Scene scene = new Scene(root, 900, 600);
+            scene.getStylesheets().add(getClass().getResource("/css/lightTheme.css").getFile());
+            Stage window = (Stage) menuBar.getScene().getWindow();
+            window.setScene(scene);
+            window.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
