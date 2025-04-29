@@ -5,6 +5,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -96,6 +97,34 @@ public class DB_GUI_Controller implements Initializable {
             major.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> validateFormFields());
             email.textProperty().addListener((obs, oldVal, newVal) -> validateFormFields());
 
+
+            // Setup search
+            FilteredList<Person> filteredData = new FilteredList<>(data, p -> true);
+
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredData.setPredicate(person -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true;
+                    }
+                    String lowerCaseFilter = newValue.toLowerCase();
+                    if (person.getFirstName().toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    } else if (person.getLastName().toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    } else if (person.getDepartment().toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    } else if (person.getMajor().toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    } else if (person.getEmail().toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    }
+                    return false;
+                });
+            });
+
+            SortedList<Person> sortedData = new SortedList<>(filteredData);
+            sortedData.comparatorProperty().bind(tv.comparatorProperty());
+            tv.setItems(sortedData);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -180,6 +209,10 @@ public class DB_GUI_Controller implements Initializable {
             Stage window = (Stage) menuBar.getScene().getWindow();
             window.setScene(scene);
             window.show();
+
+            if (searchField != null) {
+                searchField.clear();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -400,6 +433,10 @@ public class DB_GUI_Controller implements Initializable {
             Stage window = (Stage) menuBar.getScene().getWindow();
             window.setScene(scene);
             window.show();
+
+            if (searchField != null) {
+                searchField.clear();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
