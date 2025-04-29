@@ -5,14 +5,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextArea layoutX="6.0" layoutY="51.0" prefHeight="343.0" prefWidth="584.0" text="Your text goes here " wrapText="true">
+      <TextArea layoutX="6.0" layoutY="51.0" prefHeight="343.0" prefWidth="584.0" text="Application Branding&#10;To give the application a clean, professional, and academic appearance, we adopted a green and white color scheme throughout the UI. The focus of the application was also switched to a academic advisment program, to organize students that need to meetings.&#10;&#10;Search Bar for the Data Table&#10;A search bar was added to allow users to quickly filter student records based on names or majors. This improves usability, especially as the dataset grows. The implementation listens for changes in the search field and applies a filtered list to the TableView.&#10;&#10;Visual Feedback for Field Validation&#10;To improve the user's experience, text field borders will change colors depending on the current validation state. Implemented using regex-based validators.&#10;&#10;Session Timeout for Inactivity&#10;For better security, the app automatically logs out users after a period of inactivity. This feature protects sensitive data and enforces best practices in session control. Implemented using a PauseTransition timer that resets with user movement (ex., mouse or key input)." wrapText="true">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </TextArea>
-      <Label alignment="TOP_LEFT" layoutX="8.0" layoutY="11.0" prefHeight="44.0" prefWidth="542.0" text="Developer: MM mM">
+      <Label alignment="TOP_LEFT" layoutX="8.0" layoutY="11.0" prefHeight="44.0" prefWidth="542.0" text="Developer: Anthony Costa">
          <font>
             <Font name="System Bold" size="26.0" />
          </font>
