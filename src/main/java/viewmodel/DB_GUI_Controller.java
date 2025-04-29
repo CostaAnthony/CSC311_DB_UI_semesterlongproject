@@ -22,12 +22,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Person;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import service.MyLogger;
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class DB_GUI_Controller implements Initializable {
 
@@ -440,5 +443,68 @@ public class DB_GUI_Controller implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleGenerateReport(ActionEvent event) {
+        generatePdfReport();  // <- This is your method to create the PDF and alert the user
+    }
+
+    private Map<String, Integer> countStudentsByMajor(List<Person> students) {
+        Map<String, Integer> majorCounts = new HashMap<>();
+        for (Person s : students) {
+            String major = s.getMajor(); // adjust getter if different
+            majorCounts.put(major, majorCounts.getOrDefault(major, 0) + 1);
+        }
+        return majorCounts;
+    }
+
+    private void generatePdfReport() {
+        try {
+            List<Person> studentList = tv.getItems(); // Or your backing list
+            Map<String, Integer> majorCounts = countStudentsByMajor(studentList);
+
+            PDDocument document = new PDDocument();
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
+            contentStream.newLineAtOffset(100, 700); // X, Y Position
+            contentStream.showText("Student Count by Major:");
+            contentStream.newLine(); // Move down a bit
+
+            // Set a smaller font for the list
+            contentStream.setFont(PDType1Font.HELVETICA, 12);
+            contentStream.newLineAtOffset(0, -20); // Move down again
+
+            for (Map.Entry<String, Integer> entry : majorCounts.entrySet()) {
+                String line = entry.getKey() + ": " + entry.getValue();
+                contentStream.showText(line);
+                contentStream.newLineAtOffset(0, -20); // Move down for the next line
+            }
+
+            contentStream.endText();
+            contentStream.close();
+
+            // Save to Desktop
+            String desktopPath = System.getProperty("user.home") + "/Desktop/Student_Major_Report.pdf";
+            document.save(desktopPath);
+            document.close();
+
+            showAlert("Report generated", "PDF report saved as Student_Major_Report.pdf");
+
+        } catch (IOException e) {
+            showAlert("Error", "Failed to generate report: " + e.getMessage());
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null); // No header
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

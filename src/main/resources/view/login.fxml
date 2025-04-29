@@ -12,13 +12,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="rootpane" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1100.0" styleClass="grid_pane" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewmodel.LoginController">
+<GridPane fx:id="rootpane" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1100.0" styleClass="grid_pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewmodel.LoginController">
     <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="165.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="165.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="401.0" minWidth="10.0" prefWidth="207.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="76.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="503.0" minWidth="10.0" prefWidth="503.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="139.99992675781255" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="401.0" minWidth="10.0" prefWidth="207.0" />
+      <ColumnConstraints />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="137.2" minHeight="10.0" prefHeight="89.0" vgrow="SOMETIMES" />
@@ -28,7 +28,6 @@
         <RowConstraints maxHeight="277.0" minHeight="0.0" prefHeight="46.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="284.0000122070312" minHeight="10.0" prefHeight="86.5" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="277.0" minHeight="0.0" prefHeight="41.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="277.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="277.0" minHeight="10.0" prefHeight="49.000048828125045" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
@@ -37,51 +36,58 @@
                 <Insets />
             </GridPane.margin>
             <children>
-                <Label alignment="CENTER" prefHeight="114.0" prefWidth="1362.0" style="-fx-border-color: BLACK;" styleClass="login_title" text="STUDENT REGISTRATION&#10;" textAlignment="CENTER" textFill="#111386" wrapText="true">
+                <Label alignment="CENTER" prefHeight="93.0" prefWidth="741.0" style="-fx-border-color: BLACK;" styleClass="login_title" text="Advisement System&#10;" textAlignment="CENTER" textFill="#0c6226" wrapText="true">
                     <font>
                         <Font name="System Bold" size="51.0" />
                     </font>
                 </Label>
             </children>
         </HBox>
-        <VBox alignment="CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <VBox alignment="CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
          <children>
                 <TextField id="emailTextField" fx:id="usernameTextField" prefHeight="28.0" prefWidth="400.0" promptText="email_id@domain.edu" style="-fx-border-color: BLACK;" styleClass="login_text_field" />
          </children>
         </VBox>
-        <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
          <children>
                 <PasswordField fx:id="passwordField" style="-fx-border-color: BLACK;" styleClass="login_password_field" />
          </children>
         </VBox>
-        <VBox alignment="CENTER" prefHeight="601.0" prefWidth="723.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
-            <children>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
-            </children>
-        </VBox>
-        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" />
-          <Label id="emailLabel" fx:id="usernameLabel" alignment="TOP_CENTER" contentDisplay="TOP" focusTraversable="false" prefHeight="23.0" prefWidth="156.0" styleClass="login_label" text="Username" textAlignment="RIGHT" GridPane.rowIndex="3">
+          <Label id="emailLabel" fx:id="usernameLabel" alignment="TOP_CENTER" contentDisplay="TOP" focusTraversable="false" prefHeight="27.0" prefWidth="255.0" styleClass="login_label" text="Username" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3">
               <font>
                   <Font name="System Bold" size="18.0" />
               </font>
           </Label>
-          <Label id="passwordLabel" fx:id="passwordLabel" alignment="CENTER" contentDisplay="TOP" prefHeight="23.0" prefWidth="154.0" styleClass="login_label" text="Password" textAlignment="RIGHT" GridPane.rowIndex="4">
+          <Label id="passwordLabel" fx:id="passwordLabel" alignment="CENTER" contentDisplay="TOP" prefHeight="27.0" prefWidth="253.0" styleClass="login_label" text="Password" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="4">
               <font>
                   <Font name="System Bold" size="18.0" />
               </font>
           </Label>
-          <Button fx:id="loginBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="208.0" style="-fx-background-color: Green; -fx-border-color: BLACK;" styleClass="login_button" text="Login" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="5">
+          <Button fx:id="loginBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="208.0" style="-fx-background-color: Green; -fx-border-color: BLACK;" styleClass="login_button" text="Login" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="5">
               <font>
                   <Font name="System Bold" size="18.0" />
               </font>
+         <GridPane.margin>
+            <Insets left="15.0" />
+         </GridPane.margin>
           </Button>
-            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#signUp" prefHeight="40.0" prefWidth="210.0" style="-fx-background-color: RED; -fx-border-color: BLACK;" styleClass="login_button" text="Sign Up" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#signUp" prefHeight="40.0" prefWidth="210.0" style="-fx-background-color: RED; -fx-border-color: BLACK;" styleClass="login_button" text="Sign Up" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="6">
                 <font>
                     <Font name="System Bold" size="15.0" />
                 </font>
+         <GridPane.margin>
+            <Insets left="15.0" />
+         </GridPane.margin>
             </Button>
+      <Label alignment="CENTER_RIGHT" prefHeight="93.0" prefWidth="741.0" text="L" textAlignment="CENTER" textFill="#0c6226" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <font>
+            <Font name="System Bold" size="51.0" />
+         </font>
+      </Label>
+      <Label prefHeight="93.0" prefWidth="741.0" text="ogin" textAlignment="CENTER" textFill="#0c6226" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+         <font>
+            <Font name="System Bold" size="51.0" />
+         </font>
+      </Label>
     </children>
 </GridPane>

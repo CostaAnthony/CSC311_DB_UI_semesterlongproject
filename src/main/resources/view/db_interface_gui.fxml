@@ -45,6 +45,11 @@
                         <MenuItem fx:id="exportCSVItem" mnemonicParsing="false" onAction="#exportCSV" styleClass="menu_items" text="Export CSV" />
                      </items>
                   </Menu>
+                  <Menu mnemonicParsing="false" styleClass="menu_options" text="Reports">
+                     <items>
+                        <MenuItem fx:id="genPdf" mnemonicParsing="false" onAction="#handleGenerateReport" styleClass="menu_items" text="Generate PDF" />
+                     </items>
+                  </Menu>
                         <Menu mnemonicParsing="false" styleClass="menu_options" text="Theme">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#lightTheme" styleClass="menu_items" text="LIGHT THEME" />
@@ -101,16 +106,16 @@
                                 <Insets left="10.0" right="10.0" top="5.0" />
                             </VBox.margin>
                         </TextField>
-                  <ComboBox fx:id="major" prefHeight="25.0" prefWidth="182.0" promptText="Major">
-                     <VBox.margin>
-                        <Insets left="10.0" right="10.0" top="5.0" />
-                     </VBox.margin>
-                  </ComboBox>
                         <TextField fx:id="email" promptText="Email" styleClass="text_field">
                             <VBox.margin>
                                 <Insets left="10.0" right="10.0" top="5.0" />
                             </VBox.margin>
                         </TextField>
+                  <ComboBox fx:id="major" prefHeight="25.0" prefWidth="182.0" promptText="Major">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="5.0" />
+                     </VBox.margin>
+                  </ComboBox>
                         <TextField fx:id="imageURL" promptText="imageURL" styleClass="text_field">
                             <VBox.margin>
                                 <Insets left="10.0" right="10.0" top="5.0" />
